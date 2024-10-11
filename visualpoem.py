@@ -127,6 +127,8 @@ def make_own_essence(poem_initial):
         poem_lines.append(hgj("도         도          레        미         파          솔         라      시"))
         poem_lines.append(hgj("도         도          레        미         파          솔         라      시"))
         poem_lines.append(hgj("도 도 도 도 레 레 레 레 미 미 미 미 파 파 파 파 솔 솔 솔 솔 라 라 라 라 시 시 시 시"))
+    elif poem_initial in saved_poems and saved_poems[poem_initial]:
+            poem_lines = saved_poems[poem_initial]
         
         
         
