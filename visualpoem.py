@@ -128,7 +128,7 @@ def make_own_essence(poem_initial):
         poem_lines.append(hgj("도         도          레        미         파          솔         라      시"))
         poem_lines.append(hgj("도 도 도 도 레 레 레 레 미 미 미 미 파 파 파 파 솔 솔 솔 솔 라 라 라 라 시 시 시 시"))
     elif poem_initial in saved_poems and saved_poems[poem_initial]:
-            poem_lines = saved_poems[poem_initial]
+        poem_lines = saved_poems[poem_initial]
         
         
         
@@ -139,7 +139,6 @@ def home():
     poem_lines = []
     poem_name = ""
     show_memo = False
-    custom_poem = ""
 
     if request.method == 'POST':
         poem_initial = request.form.get('poem_initial')
@@ -148,11 +147,7 @@ def home():
         else:
             poem_lines = make_own_essence(poem_initial)
             if not poem_lines:
-                custom_poem = request.form.get('custom_poem', "")
-                if custom_poem:
-                    poem_lines = custom_poem.splitlines()
-                else:
-                    show_memo = True  # 메모장 표시
+                show_memo=True
         
         if poem_initial == "ㄴ":
             poem_name = "나비"
