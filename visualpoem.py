@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
 saved_poems={}
+poem_initials=[]
 
 def hgj(sentence):
     result = ""
@@ -137,26 +138,35 @@ def home():
     poem_lines = []
     poem_name=""
     show_memo=False
+    custom_poem=""
+    
     if request.method == 'POST':
         poem_initial = request.form.get('poem_initial')
-        poem_lines = make_own_essence(poem_initial)
-        if not poem_lines:
-            poem_name="Now, make '"'Your'"' essence"
-            show_memo=True
-            if poem_initial not in poem_initials:
-                poem_initials.append(poem_initial)
-            return render_template('index.html', poem_lines=[],poem_name=poem_name,show_memo=True)
-        poem_name_dict = {
-            "ㄴ": "나비",
-            "ㄷ": "등대",
-            "ㅂ": "번개",
-            "ㅇ": "알루미늄",
-            "ㅋ": "카메라",
-            "ㅁ": "물방울",
-            "ㅍ": "피아노",
-        }
+        if poem_initial not in poem_initials:  # poem_initials는 등록된 초성 리스트
+            show_memo = True  # 메모장 표시
+        else:
+            poem_lines = make_own_essence(poem_initial)
+            if not poem_lines:
+                custom_poem = request.form.get('custom_poem', "")
+                if custom_poem:
+                    poem_lines = custom_poem.splitlines()
+                else:
+                    show_memo = True  # 메모장 표시
         
-        poem_name = poem_name_dict.get(poem_initial, "")
+        if poem_initial == "ㄴ":
+            poem_name = "나비"
+        elif poem_initial == "ㄷ":
+            poem_name = "등대"
+        elif poem_initial == "ㅂ":
+            poem_name = "번개"
+        elif poem_initial == "ㅇ":
+            poem_name = "알루미늄"
+        elif poem_initial == "ㅋ":
+            poem_name = "카메라"
+        elif poem_initial == "ㅁ":
+            poem_name = "물방울"
+        elif poem_initial == "ㅍ":
+            poem_name = "피아노"
         
         
             
