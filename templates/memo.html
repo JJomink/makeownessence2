@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나만의 시 작성하기</title>
+</head>
+<body>
+    <h1>초성 '{{ poem_initial }}' 에 대한 나만의 시를 작성하세요</h1>
+    
+    <form action="/" method="POST">
+        <textarea name="custom_poem" rows="10" cols="50" placeholder="여기에 시를 작성하세요"></textarea><br><br>
+        <input type="hidden" name="poem_initial" value="{{ poem_initial }}">
+        <input type="submit" value="시 저장하기">
+    </form>
+</body>
+</html>

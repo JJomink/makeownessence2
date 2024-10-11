@@ -104,20 +104,20 @@ def make_own_essence(poem_initial):
         poem_lines.append(hgj("            톡  톡톡톡"))
         poem_lines.append(hgj("          톡   톡톡톡톡톡"))
         poem_lines.append(hgj("        톡톡   톡톡톡톡톡톡"))
-        poem_lines.append(hgj("       톡톡   톡톡톡톡톡톡톡"))
-        poem_lines.append(hgj("      톡톡   톡톡톡톡톡톡톡톡"))
-        poem_lines.append(hgj("      톡톡   톡톡톡톡톡톡톡톡"))
-        poem_lines.append(hgj("      톡톡   톡톡톡톡톡톡톡톡"))
+        poem_lines.append(hgj("       톡톡   알이깨지는소리"))
+        poem_lines.append(hgj("      톡톡   눈물을떨구는소리"))
+        poem_lines.append(hgj("      톡톡   나를두드리는소리"))
+        poem_lines.append(hgj("      톡톡   한결같은마음소리"))
         poem_lines.append(hgj("       톡톡톡톡톡톡톡톡톡톡"))
         poem_lines.append(hgj("         톡   톡톡톡톡톡톡"))
         poem_lines.append(hgj("           톡톡톡톡톡톡"))
     elif poem_initial=="ㅍ":
-        poem_lines.append(hgj("도      드드드드    리리리리      미       피피피피    슬슬슬슬   비비비비      시"))
-        poem_lines.append(hgj("도      드드드드    리리리리      미       피피피피    슬슬슬슬   비비비비      시"))
-        poem_lines.append(hgj("도      드드드드    리리리리      미       피피피피    슬슬슬슬   비비비비      시"))
-        poem_lines.append(hgj("도      드드드드    리리리리      미       피피피피    슬슬슬슬   비비비비      시"))
-        poem_lines.append(hgj("도      드드드드    리리리리      미       피피피피    슬슬슬슬   비비비비      시"))
-        poem_lines.append(hgj("도      드드드드    리리리리      미       피피피피    슬슬슬슬   비비비비      시"))
+        poem_lines.append(hgj("열      드드드드    리리리리      미       피피피피    슬슬슬슬   손을가장      시"))
+        poem_lines.append(hgj("쇠      드드드드    리리리리      미       피피피피    슬슬슬슬   헛딛었던      시"))
+        poem_lines.append(hgj("구      드드드드    리리리리      미       피피피피    슬슬슬슬   비비비비      시"))
+        poem_lines.append(hgj("멍      드드드드    리리리리      미       피피피피    슬슬슬슬   비비비비      시"))
+        poem_lines.append(hgj("위      드드드드    리리리리      미       피피피피    슬슬슬슬   비비비비      시"))
+        poem_lines.append(hgj("의      드드드드    리리리리      미       피피피피    슬슬슬슬   비비비비      시"))
         poem_lines.append(hgj("도      드드드드    리리리리      미       피피피피    슬슬슬슬   비비비비      시"))
         poem_lines.append(hgj("도      드드드드    리리리리      미       피피피피    슬슬슬슬   비비비비      시"))
         poem_lines.append(hgj("도      드드드드    리리리리      미       피피피피    슬슬슬슬   비비비비      시"))
@@ -136,9 +136,17 @@ def make_own_essence(poem_initial):
 def home():
     poem_lines = []
     poem_name=""
+    custom_poem=""
     if request.method == 'POST':
         poem_initial = request.form.get('poem_initial')
         poem_lines = make_own_essence(poem_initial)
+        if not poem_lines:
+            custom_poem = request.form.get('custom_poem', "")
+            if custom_poem:
+                poem_lines = custom_poem.splitlines() 
+            else:
+                return render_template('memo.html', poem_initial=poem_initial)
+
         
         if poem_initial == "ㄴ":
             poem_name = "나비"
@@ -156,7 +164,10 @@ def home():
             poem_name = "피아노"
             
     return render_template('index.html', poem_lines=poem_lines,poem_name=poem_name)
-
+@app.route("/memo", methods=["POST"])
+def memo():
+    poem_initial = request.form.get('poem_initial')
+    return render_template('memo.html', poem_initial=poem_initial)
 
 if __name__ == "__main__":
     app.run(debug=True)
