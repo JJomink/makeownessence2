@@ -28,7 +28,32 @@
             <p>{{ line|safe }}</p>
         {% endfor %}
     </div>
-    
+    <h2>메모 추가하기</h2>
+    <form id="memoForm">
+        <textarea id="new_poem" name="new_poem" rows="5" placeholder="여기에 메모를 입력하세요..."></textarea>
+        <input type="hidden" id="poem_initial" name="poem_initial" value="{{ poem_name }}">
+        <button type="button" onclick="savePoem()">메모 저장</button>
+    </form>
+
+    <script>
+        function savePoem() {
+            const poemInitial = document.getElementById('poem_initial').value;
+            const newPoem = document.getElementById('new_poem').value;
+
+            fetch('/save_poem', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ poem_initial: poemInitial, new_poem: newPoem })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                document.getElementById('new_poem').value = ""; // 입력 필드 초기화
+            });
+        }
+    </script>
 
 </body>
 </html>

@@ -1,7 +1,7 @@
-from flask import Flask, render_template, request
-import random
+from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
+saved_poems={}
 
 def hgj(sentence):
     result = ""
@@ -146,28 +146,35 @@ def home():
                 poem_lines = custom_poem.splitlines() 
             else:
                 return render_template('memo.html', poem_initial=poem_initial)
-
+        poem_name_dict = {
+            "ㄴ": "나비",
+            "ㄷ": "등대",
+            "ㅂ": "번개",
+            "ㅇ": "알루미늄",
+            "ㅋ": "카메라",
+            "ㅁ": "물방울",
+            "ㅍ": "피아노",
+        }
         
-        if poem_initial == "ㄴ":
-            poem_name = "나비"
-        elif poem_initial == "ㄷ":
-            poem_name = "등대"
-        elif poem_initial == "ㅂ":
-            poem_name = "번개"
-        elif poem_initial == "ㅇ":
-            poem_name = "알루미늄"
-        elif poem_initial == "ㅋ":
-            poem_name = "카메라"
-        elif poem_initial == "ㅁ":
-            poem_name = "물방울"
-        elif poem_initial == "ㅍ":
-            poem_name = "피아노"
+        poem_name = poem_name_dict.get(poem_initial, "")
+        
+        
             
     return render_template('index.html', poem_lines=poem_lines,poem_name=poem_name)
-@app.route("/memo", methods=["POST"])
-def memo():
-    poem_initial = request.form.get('poem_initial')
-    return render_template('memo.html', poem_initial=poem_initial)
+@app.route("/save_poem", methods=["POST"])
+def save_poem():
+    data = request.get_json()
+    poem_initial = data['poem_initial']
+    new_poem = data['new_poem']
+    if poem_initial in saved_poems:
+        saved_poems[poem_initial].append(new_poem)
+    else:
+        saved_poems[poem_initial] = [new_poem]
+
+    return jsonify({"status": "success", "message": f"새로운 시가 추가되었습니다: {poem_initial}"})
+
+
+    
 
 if __name__ == "__main__":
     app.run(debug=True)
