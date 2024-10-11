@@ -136,16 +136,12 @@ def make_own_essence(poem_initial):
 def home():
     poem_lines = []
     poem_name=""
-    custom_poem=""
     if request.method == 'POST':
         poem_initial = request.form.get('poem_initial')
         poem_lines = make_own_essence(poem_initial)
         if not poem_lines:
-            custom_poem = request.form.get('custom_poem', "")
-            if custom_poem:
-                poem_lines = custom_poem.splitlines() 
-            else:
-                return render_template('memo.html', poem_initial=poem_initial)
+            poem_name="등록되지 않은 초성입니다"
+            return render_template('index.html', poem_lines=[],poem_name=poem_name,show_memo=True)
         poem_name_dict = {
             "ㄴ": "나비",
             "ㄷ": "등대",
@@ -160,7 +156,7 @@ def home():
         
         
             
-    return render_template('index.html', poem_lines=poem_lines,poem_name=poem_name)
+    return render_template('index.html', poem_lines=poem_lines,poem_name=poem_name,show_memo=False)
 @app.route("/save_poem", methods=["POST"])
 def save_poem():
     data = request.get_json()
