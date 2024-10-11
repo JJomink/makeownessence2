@@ -132,47 +132,42 @@ def make_own_essence(poem_initial):
         
 
     return poem_lines
-
-@app.route("/",methods=["GET","POST"])
+@app.route("/", methods=["GET", "POST"])
 def home():
     poem_lines = []
-    poem_name=""
-    show_memo=False
-    custom_poem=""
+    poem_name = ""
+    show_memo = False
+    custom_poem = ""
+
     if request.method == 'POST':
         poem_initial = request.form.get('poem_initial')
-        if poem_initial in saved_poems:
-            # 저장된 시를 보여줌
-            poem_lines = saved_poems[poem_initial]
-            poem_name = poem_initial  # 혹시 이름을 설정할 필요가 있을 경우
-        elif poem_initial in poem_initials:  # 등록된 초성이 입력된 경우
-            poem_lines = make_own_essence(poem_initial)
-            if poem_initial == "ㄴ":
-                poem_name = "나비"
-            elif poem_initial == "ㄷ":
-                poem_name = "등대"
-            elif poem_initial == "ㅂ":
-                poem_name = "번개"
-            elif poem_initial == "ㅇ":
-                poem_name = "알루미늄"
-            elif poem_initial == "ㅋ":
-                poem_name = "카메라"
-            elif poem_initial == "ㅁ":
-                poem_name = "물방울"
-            elif poem_initial == "ㅍ":
-                poem_name = "피아노"
+        if poem_initial not in poem_initials:  # 등록된 초성 확인
+            show_memo = True  # 메모장 표시
         else:
-            # 특정 초성일 때만 메모장 표시
-            if poem_initial in ["ㄱ", "ㄹ", "ㅁ", "ㅅ", "ㅈ", "ㅊ", "ㅎ"]:
-                show_memo = True
-
-            # 사용자 시 저장 처리
-            custom_poem = request.form.get('custom_poem', "")
-            if custom_poem:
-                saved_poems[poem_initial] = custom_poem.splitlines()  # 사용자 시 저장
-                poem_lines = saved_poems[poem_initial]  # 방금 저장한 시 출력
-                
-    return render_template('index.html', poem_lines=poem_lines,poem_name=poem_name,show_memo=show_memo)
+            poem_lines = make_own_essence(poem_initial)
+            if not poem_lines:
+                custom_poem = request.form.get('custom_poem', "")
+                if custom_poem:
+                    poem_lines = custom_poem.splitlines()
+                else:
+                    show_memo = True  # 메모장 표시
+        
+        if poem_initial == "ㄴ":
+            poem_name = "나비"
+        elif poem_initial == "ㄷ":
+            poem_name = "등대"
+        elif poem_initial == "ㅂ":
+            poem_name = "번개"
+        elif poem_initial == "ㅇ":
+            poem_name = "알루미늄"
+        elif poem_initial == "ㅋ":
+            poem_name = "카메라"
+        elif poem_initial == "ㅁ":
+            poem_name = "물방울"
+        elif poem_initial == "ㅍ":
+            poem_name = "피아노"
+            
+    return render_template('index.html', poem_lines=poem_lines, poem_name=poem_name, show_memo=show_memo)
 @app.route("/save_poem", methods=["POST"])
 def save_poem():
     data = request.get_json()
