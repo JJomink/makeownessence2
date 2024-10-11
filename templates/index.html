@@ -31,7 +31,7 @@
     {% if show_memo %}
         <h2>메모 추가하기</h2>
         <form id="memoForm">
-            <textarea id="new_poem" name="new_poem" rows="5" placeholder="여기에 메모를 입력하세요..."></textarea>
+            <textarea id="new_poem" name="new_poem" rows="5" placeholder="여기에 시각시를 작성하세요..."></textarea>
             <input type="hidden" id="poem_initial" name="poem_initial" value="{{ poem_name }}">
             <button type="button" onclick="savePoem()">메모 저장</button>
         </form>
