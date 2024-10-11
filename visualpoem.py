@@ -127,12 +127,9 @@ def make_own_essence(poem_initial):
         poem_lines.append(hgj("도         도          레        미         파          솔         라      시"))
         poem_lines.append(hgj("도         도          레        미         파          솔         라      시"))
         poem_lines.append(hgj("도 도 도 도 레 레 레 레 미 미 미 미 파 파 파 파 솔 솔 솔 솔 라 라 라 라 시 시 시 시"))
-    elif poem_initial in saved_poems and saved_poems[poem_initial]:
-        poem_lines = saved_poems[poem_initial]
+    elif poem_initial in saved_poems:
+        poem_lines.extend(saved_poems[poem_initial])
         
-        
-        
-
     return poem_lines
 @app.route("/", methods=["GET", "POST"])
 def home():
@@ -148,21 +145,16 @@ def home():
             poem_lines = make_own_essence(poem_initial)
             if not poem_lines:
                 show_memo=True
+            poem_name = {
+                "ㄴ": "나비",
+                "ㄷ": "등대",
+                "ㅂ": "번개",
+                "ㅇ": "알루미늄",
+                "ㅋ": "카메라",
+                "ㅁ": "물방울",
+                "ㅍ": "피아노"
+            }.get(poem_initial, "알 수 없는 초성")
         
-        if poem_initial == "ㄴ":
-            poem_name = "나비"
-        elif poem_initial == "ㄷ":
-            poem_name = "등대"
-        elif poem_initial == "ㅂ":
-            poem_name = "번개"
-        elif poem_initial == "ㅇ":
-            poem_name = "알루미늄"
-        elif poem_initial == "ㅋ":
-            poem_name = "카메라"
-        elif poem_initial == "ㅁ":
-            poem_name = "물방울"
-        elif poem_initial == "ㅍ":
-            poem_name = "피아노"
             
     return render_template('index.html', poem_lines=poem_lines, poem_name=poem_name, show_memo=show_memo)
 @app.route("/save_poem", methods=["POST"])
