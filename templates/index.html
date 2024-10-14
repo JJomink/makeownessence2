@@ -21,7 +21,7 @@
     <form method="POST" action="/">
         <input type="hidden" name="action" value="generate_poem">
         <label for="initial">what are you wondering about? choose one among ㄴ,ㄷ,ㅂ,ㅇ,ㅋ,ㅁ,ㅍ:</label>
-        <input type="text" id="poem_initial" name="poem_initial" maxlength="1" required>
+        <input type="text" id="poem_initial" name="poem_initial" maxlength="2" required>
         <button type="submit">click to generate</button>
     </form>
     {% if user_defined %}
