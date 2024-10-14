@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, session
-import random
 
 app = Flask(__name__)
+app.secret_key = 'your_secret_key' 
 
 def hgj(sentence):
     result = ""
@@ -133,40 +133,44 @@ def make_own_essence(poem_initial):
 
     return poem_lines
 
-@app.route("/",methods=["GET","POST","HEAD"])
+@app.route("/",methods=["GET","POST"])
 def home():
     poem_lines = []
     poem_name=""
+    user_defined = False
     if request.method == 'POST':
-        poem_initial = request.form.get('poem_initial')
-        poem_lines = make_own_essence(poem_initial)
-        
-        if poem_initial == "마음":
-            user_defined = True
-            poem_name = "make_your_own_essence"
-            poem_lines = session.get('user_poem', [])
-        else:
-            if poem_initial == "ㄴ":
-                poem_name = "나비"
-            elif poem_initial == "ㄷ":
-                poem_name = "등대"
-            elif poem_initial == "ㅂ":
-                poem_name = "번개"
-            elif poem_initial == "ㅇ":
-                poem_name = "알루미늄"
-            elif poem_initial == "ㅋ":
-                poem_name = "카메라"
-            elif poem_initial == "ㅁ":
-                poem_name = "물방울"
-            elif poem_initial == "ㅍ":
-                poem_name = "피아노"
-                
-        if 'user_poem' in request.form:
-            user_poem = request.form.get('user_poem')
-            # 줄 단위로 나눠서 저장
+        action = request.form.get('action')
+        if action == 'generate_poem':
+            poem_initial = request.form.get('poem_initial')
+            poem_lines = make_own_essence(poem_initial)
+            
+            if poem_initial == "마음":
+                user_defined = True
+                poem_name = "make_your_own_essence"
+                poem_lines = session.get('user_poem', [])
+            else:
+                if poem_initial == "ㄴ":
+                    poem_name = "나비"
+                elif poem_initial == "ㄷ":
+                    poem_name = "등대"
+                elif poem_initial == "ㅂ":
+                    poem_name = "번개"
+                elif poem_initial == "ㅇ":
+                    poem_name = "알루미늄"
+                elif poem_initial == "ㅋ":
+                    poem_name = "카메라"
+                elif poem_initial == "ㅁ":
+                    poem_name = "물방울"
+                elif poem_initial == "ㅍ":
+                    poem_name = "피아노"
+        elif action == 'save_poem':
+            user_poem = request.form.get('user_poem', '')
             session['user_poem'] = [hgj(line) for line in user_poem.splitlines()]
             poem_lines = session['user_poem']
-            
+            poem_name = "Your Custom Poem"
+            user_defined = True    
+                
+        
             
     return render_template('index.html', poem_lines=poem_lines,poem_name=poem_name,user_defined=user_defined)
 
