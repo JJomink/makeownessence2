@@ -141,7 +141,7 @@ def home():
     if request.method == 'POST':
         action = request.form.get('action')
         if action == 'generate_poem':
-            poem_initial = request.form.get('poem_initial')
+            poem_initial = request.form.get('poem_initial','')
             poem_lines = make_own_essence(poem_initial)
             
             if poem_initial == "마음":
