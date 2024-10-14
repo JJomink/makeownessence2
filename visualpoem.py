@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 import random
 
 app = Flask(__name__)
@@ -126,7 +126,8 @@ def make_own_essence(poem_initial):
         poem_lines.append(hgj("도         도          레        미         파          솔         라      시"))
         poem_lines.append(hgj("도         도          레        미         파          솔         라      시"))
         poem_lines.append(hgj("도 도 도 도 레 레 레 레 미 미 미 미 파 파 파 파 솔 솔 솔 솔 라 라 라 라 시 시 시 시"))
-        
+    elif poem_initial == "마음":
+        poem_lines = []
         
         
 
@@ -140,22 +141,34 @@ def home():
         poem_initial = request.form.get('poem_initial')
         poem_lines = make_own_essence(poem_initial)
         
-        if poem_initial == "ㄴ":
-            poem_name = "나비"
-        elif poem_initial == "ㄷ":
-            poem_name = "등대"
-        elif poem_initial == "ㅂ":
-            poem_name = "번개"
-        elif poem_initial == "ㅇ":
-            poem_name = "알루미늄"
-        elif poem_initial == "ㅋ":
-            poem_name = "카메라"
-        elif poem_initial == "ㅁ":
-            poem_name = "물방울"
-        elif poem_initial == "ㅍ":
-            poem_name = "피아노"
+        if poem_initial == "마음":
+            user_defined = True
+            poem_name = "make_your_own_essence"
+            poem_lines = session.get('user_poem', [])
+        else:
+            if poem_initial == "ㄴ":
+                poem_name = "나비"
+            elif poem_initial == "ㄷ":
+                poem_name = "등대"
+            elif poem_initial == "ㅂ":
+                poem_name = "번개"
+            elif poem_initial == "ㅇ":
+                poem_name = "알루미늄"
+            elif poem_initial == "ㅋ":
+                poem_name = "카메라"
+            elif poem_initial == "ㅁ":
+                poem_name = "물방울"
+            elif poem_initial == "ㅍ":
+                poem_name = "피아노"
+                
+        if 'user_poem' in request.form:
+            user_poem = request.form.get('user_poem')
+            # 줄 단위로 나눠서 저장
+            session['user_poem'] = [hgj(line) for line in user_poem.splitlines()]
+            poem_lines = session['user_poem']
             
-    return render_template('index.html', poem_lines=poem_lines,poem_name=poem_name)
+            
+    return render_template('index.html', poem_lines=poem_lines,poem_name=poem_name,user_defined=user_defined)
 
 
 if __name__ == "__main__":

@@ -23,6 +23,15 @@
         <input type="text" id="poem_initial" name="poem_initial" maxlength="1" required>
         <button type="submit">click to generate</button>
     </form>
+    {% if user_defined %}
+    <form method="POST" action="/">
+        <p>Write your own visual poem below:</p>
+        <textarea name="user_poem" rows="10" cols="40"></textarea>
+        <br>
+        <button type="submit">Save Poem</button>
+    </form>
+    {% endif %}
+
     <div class="poem">
         {% for line in poem_lines %}
             <p>{{ line|safe }}</p>
