@@ -133,7 +133,7 @@ def make_own_essence(poem_initial):
 
     return poem_lines
 
-@app.route("/",methods=["GET","POST"])
+@app.route("/",methods=["GET","POST","HEAD"])
 def home():
     poem_lines = []
     poem_name=""
